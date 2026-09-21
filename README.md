@@ -9,7 +9,7 @@ This demo contains the customer catalogue at `/` and the protected store console
 3. Create Firestore Database and Storage.
 4. Copy the Web App values into `firebase-config.js`.
 5. Create the admin user in Firebase Authentication.
-6. Set the user's custom claim `{ "admin": true }` with a trusted Admin SDK script or Cloud Function. Never set this claim from the browser.
+6. Create `admins/{AUTH_USER_UID}` in Firestore with `{ "admin": true }`, or assign the user's custom claim `{ "admin": true }` with a trusted Admin SDK script or Cloud Function. Never grant admin access from the browser.
 7. Deploy rules and hosting:
 
 ```sh
@@ -24,7 +24,7 @@ Run the site through Firebase Hosting or another local HTTP server. Firebase ES 
 
 The admin console manages `products`, `categories`, `enquiries`, `hero_slides`, `promo_banners`, and `store_settings/main`.
 
-The public site reads active products, categories, hero slides, and `store_settings/main`. Public customers may create `enquiries`; only users with the Firebase `admin` custom claim can manage data.
+The public site reads active products, categories, hero slides, and `store_settings/main`. Public customers may create `enquiries`; only users with an approved `admins/{uid}` document or Firebase `admin` custom claim can manage data.
 
 ## Admin claim example
 

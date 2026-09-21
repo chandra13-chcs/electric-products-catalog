@@ -68,13 +68,10 @@
 		const slides=[['Electrical products for <span>every need.</span>','Reliable electrical, lighting and hardware solutions for homes, businesses and projects.','https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1400&q=85'],['Power your projects <span>with confidence.</span>','Quality products for electricians, contractors and everyday home requirements.','https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=1400&q=85'],['Everything from wires <span>to tools.</span>','Explore our complete electrical and hardware collection.','https://images.unsplash.com/photo-1581147036324-c17ac41d8b7b?auto=format&fit=crop&w=1400&q=85']];let slide=0;function setSlide(n){slide=(n+slides.length)%slides.length;$('#heroTitle').innerHTML=slides[slide][0];$('#heroText').textContent=slides[slide][1];$('#heroArt').style.backgroundImage=`url('${slides[slide][2]}')`;$('#dots').innerHTML=slides.map((_,i)=>`<i class="${i===slide?'on':''}"></i>`).join('')}$('#prevSlide').onclick=()=>setSlide(slide-1);$('#nextSlide').onclick=()=>setSlide(slide+1);setSlide(0);setInterval(()=>setSlide(slide+1),6500);
 	</script>
 	<script type="module">
-		import { firebaseConfig, isFirebaseConfigured } from './firebase-config.js';
-		import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-		import { getFirestore, collection, getDocs, doc, getDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+		import { db, isFirebaseConfigured } from './firebase-config.js';
+		import { collection, getDocs, doc, getDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 		if (isFirebaseConfigured) {
-			const app = initializeApp(firebaseConfig);
-			const db = getFirestore(app);
 			const readCollection = async name => (await getDocs(collection(db, name))).docs.map(item => ({ id: item.id, ...item.data() }));
 			const loadPublicStore = async () => {
 				const [remoteProducts, remoteCategories, remoteSlides, settings] = await Promise.all([
