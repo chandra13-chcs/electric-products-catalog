@@ -405,6 +405,17 @@
     const toBool = (value) => value === true || value === 'true';
     const categoryName = (id) => state.categories.find((item) => item.id === id)?.name || 'Uncategorised';
 
+    async function isAdminUser(user) {
+      if (!user) return false;
+      if (user.customClaims?.admin === true) return true;
+      try {
+        const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+        return adminDoc.exists() && adminDoc.data().admin === true;
+      } catch (error) {
+        return false;
+      }
+    }
+
     function toast(message) {
       const box = $('#toast');
       box.textContent = message;
@@ -790,8 +801,8 @@
           return;
         }
         try {
-          const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-          if (!adminDoc.exists() || adminDoc.data().admin !== true) {
+          const isAdmin = await isAdminUser(user);
+          if (!isAdmin) {
             await signOut(auth);
             $('#loginError').textContent = 'This account is not authorised as an admin.';
             return;
